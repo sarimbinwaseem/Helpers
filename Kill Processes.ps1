@@ -1,31 +1,17 @@
-$f = Get-Process -Name PDStyleAgent
-if ($f.Id -gt 0){
-$f | kill
-Write-Host "PD Killed"}
-else{Write_Host "PD Not Running"}
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs; exit }
 
-$f = Get-Process -Name AdobeIPCBroker
-if ($f.Id -gt 0){
-$f | kill
-Write-Host "Adobe IPC Killed"}
-else{Write_Host "IPC Not Running"}
 
-$f = Get-Process -Name CCXProcess
-if ($f.Id -gt 0){
-$f | kill
-Write-Host "CCX Killed"}
-else{Write_Host " CCX Not Running"}
+$processes = "PDStyleAgent", "AdobeIPCBroker", "CCXProcess", "RichVideo64", "CCLibrary", "AdobeNotificationClient", "AdobeUpdateService", "PDHanumanSvr", "PDR"
 
-$f = Get-Process -Name RichVideo64
-if ($f.Id -gt 0){
-$f | kill
-Write-Host "Rich Video"}
-else{Write_Host " RichVideo Not Running"}
+Foreach ($process in $processes){
+    try {
+    $f = Get-Process $process -ErrorAction Stop
+    $f | kill
+    Write-Host "$process killed." -f red
+        } 
+    catch [Microsoft.PowerShell.Commands.ProcessCommandException]{
+    Write-Host "No instances of $process running." -f green
+        }   
+}
 
-$f = Get-Process -Name CCLibrary
-if ($f.Id -gt 0){
-$f | kill
-Write-Host "CC Library"}
-else{Write_Host " RichVideo Not Running"}
-
-Start-Sleep -Seconds 2
+Start-Sleep -Seconds 5

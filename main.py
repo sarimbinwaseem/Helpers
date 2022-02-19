@@ -1,7 +1,21 @@
 import os
-import os
 import subprocess
 import argparse
+
+def Rule(appname, dispName, domain, bound, description, name):
+	command = f"New-NetFirewallRule -Program {appname} -Action Block -Profile Domain, {domain} -DisplayName {dispName} -Description {description} -Direction {bound}"
+	# command = command.split()
+	e = subprocess.run(["powershell", "-Command",command], capture_output=True)
+	if str(e.returncode) == "1":
+		eLog = appname + f" is not blocked | {bound} | {domain}" 
+		print(eLog)
+		print(e.stderr)
+		with open(f"{name}.txt", "w+") as log:
+			log.write(eLog)
+	elif str(e.returncode) == str(0):
+		print(f"{appname} is blocked | {bound} | {domain}")
+	else:
+		print("Unidentified Error!")
 
 def check(data):
 	if str(type(data)) == "<class 'int'>":
@@ -10,40 +24,31 @@ def check(data):
 		return data
 
 def work(folder, name):
+	# with open(f"{name}.txt", "w+") as log:
+	# 	log.write("These paths are not blocked:")
+
 	description = dispName = ""
 	count = 0
 	if os.path.isdir(folder):
 		for root, dirs, files in os.walk(folder, topdown = False):
 			for file in files:
-				if file[-3:] == "exe":
+				if file[-3:].lower() == "exe":
 					appname = os.path.join(root, file)
 					appname = f"\"{appname}\""
 					print(appname)
 					description = dispName = f"\"{name} - {file}\""
-
-					# Outbound Rule
-					command = f"New-NetFirewallRule -Program {appname} -Action Block -Profile Domain, Private -DisplayName {dispName} -Description {description} -Direction Outbound"
-					# command = command.split()
-					e = subprocess.run(["powershell", "-Command",command], capture_output=True)
-					if str(e.returncode) == "1":
-						print(appname + " is not blocked | Outbound")
-						print(e.stderr)
-					elif str(e.returncode) == str(0):
-						print(f"{appname} is blocked | Outbound")
-					else:
-						print("Unidentified Error!")
-
-					# Inbound Rule
-					command = f"New-NetFirewallRule -Program {appname} -Action Block -Profile Domain, Private -DisplayName {dispName} -Description {description} -Direction Inbound"
-					e = subprocess.run(["powershell", "-Command",command], capture_output=True)
-					if str(e.returncode) == "1":
-						print(appname + " is not blocked")
-						print(e.stderr)
-					elif str(e.returncode) == str(0):
-						print(f"{appname} is blocked | Inbound")
-					else:
-						print("Unidentified Error!")
-					count += 1
+					
+					domain = "Private"
+					bound = "Inbound"
+					Rule(appname, dispName, domain, bound, description, name)
+					bound = "Outbound"
+					Rule(appname, dispName, domain, bound, description, name)
+					domain = "Public"
+					bound = "Inbound"
+					Rule(appname, dispName, domain, bound, description, name)
+					bound = "Outbound"
+					Rule(appname, dispName, domain, bound, description, name)
+					
 					print()
 
 if __name__ == "__main__":

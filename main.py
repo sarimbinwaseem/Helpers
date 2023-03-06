@@ -1,6 +1,7 @@
 import os
 import subprocess
 import argparse
+import pathlib
 
 def Rule(appname, dispName, domain, bound, description, name):
 	command = f"New-NetFirewallRule -Program {appname} -Action Block -Profile Domain, {domain} -DisplayName {dispName} -Description {description} -Direction {bound}"
@@ -29,27 +30,50 @@ def work(folder, name):
 
 	description = dispName = ""
 	count = 0
-	if os.path.isdir(folder):
-		for root, dirs, files in os.walk(folder, topdown = False):
-			for file in files:
-				if file[-3:].lower() == "exe":
-					appname = os.path.join(root, file)
-					appname = f"\"{appname}\""
-					print(appname)
-					description = dispName = f"\"{name} - {file}\""
+	if not os.path.isdir(folder):
+		return -1
+
+	else:
+		# for root, dirs, files in os.walk(folder, topdown = False):
+		# 	for file in files:
+		# 		if file[-3:].lower() == "exe":
+		# 			appname = os.path.join(root, file)
+		# 			appname = f"\"{appname}\""
+		# 			print(appname)
+		# 			description = dispName = f"\"{name} - {file}\""
 					
-					domain = "Private"
-					bound = "Inbound"
-					Rule(appname, dispName, domain, bound, description, name)
-					bound = "Outbound"
-					Rule(appname, dispName, domain, bound, description, name)
-					domain = "Public"
-					bound = "Inbound"
-					Rule(appname, dispName, domain, bound, description, name)
-					bound = "Outbound"
-					Rule(appname, dispName, domain, bound, description, name)
+		# 			domain = "Private"
+		# 			bound = "Inbound"
+		# 			Rule(appname, dispName, domain, bound, description, name)
+		# 			bound = "Outbound"
+		# 			Rule(appname, dispName, domain, bound, description, name)
+		# 			domain = "Public"
+		# 			bound = "Inbound"
+		# 			Rule(appname, dispName, domain, bound, description, name)
+		# 			bound = "Outbound"
+		# 			Rule(appname, dispName, domain, bound, description, name)
 					
-					print()
+		# 			print()
+
+		folderpath = pathlib.Path(folder)
+
+		for file in folderpath.rglob("*.[eE][xX][eE]"):
+			appname = f"\"{file}\""
+			print(appname)
+			description = dispName = f"\"{name} - {file}\""
+					
+			domain = "Private"
+			bound = "Inbound"
+			Rule(appname, dispName, domain, bound, description, name)
+			bound = "Outbound"
+			Rule(appname, dispName, domain, bound, description, name)
+			domain = "Public"
+			bound = "Inbound"
+			Rule(appname, dispName, domain, bound, description, name)
+			bound = "Outbound"
+			Rule(appname, dispName, domain, bound, description, name)
+			
+			print()
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(

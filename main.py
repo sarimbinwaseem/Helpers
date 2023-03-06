@@ -18,11 +18,6 @@ def Rule(appname, dispName, domain, bound, description, name):
 	else:
 		print("Unidentified Error!")
 
-def check(data):
-	if str(type(data)) == "<class 'int'>":
-		raise argparse.ArgumentTypeError("Invalid Argument, add a string path")
-	else:
-		return data
 
 def work(folder, name):
 	# with open(f"{name}.txt", "w+") as log:
@@ -74,6 +69,12 @@ def work(folder, name):
 			Rule(appname, dispName, domain, bound, description, name)
 			
 			print()
+
+def check(data):
+	if type(data) is int:
+		raise argparse.ArgumentTypeError("Invalid Argument, add a string path")
+	else:
+		return data
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(

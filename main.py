@@ -1,4 +1,4 @@
-import os
+# import os
 import subprocess
 import argparse
 import pathlib
@@ -24,11 +24,10 @@ def work(folder, name):
 	# 	log.write("These paths are not blocked:")
 
 	description = dispName = ""
-	count = 0
-	if not os.path.isdir(folder):
-		return -1
+	# if not os.path.isdir(folder):
+	# 	return -1
 
-	else:
+	# else:
 		# for root, dirs, files in os.walk(folder, topdown = False):
 		# 	for file in files:
 		# 		if file[-3:].lower() == "exe":
@@ -50,8 +49,12 @@ def work(folder, name):
 					
 		# 			print()
 
-		folderpath = pathlib.Path(folder)
+	folderpath = pathlib.Path(folder)
 
+	if not folderpath.is_dir():
+		return -1
+
+	else:
 		for file in folderpath.rglob("*.[eE][xX][eE]"):
 			appname = f"\"{file}\""
 			print(appname)
@@ -69,6 +72,8 @@ def work(folder, name):
 			Rule(appname, dispName, domain, bound, description, name)
 			
 			print()
+
+	return 0
 
 def check(data):
 	if type(data) is int:
@@ -89,6 +94,11 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	folder = args.path
 	name = args.name
-	work(folder, name)
 
+	res = work(folder, name)
+	if res == 0:
+		print("All EXEs are blocked.")
+
+	elif res == -1:
+		print("Supplied folder path is not a valid folder.")
 	

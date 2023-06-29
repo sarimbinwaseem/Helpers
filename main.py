@@ -101,4 +101,6 @@ if __name__ == "__main__":
 
 	elif res == -1:
 		print("Supplied folder path is not a valid folder.")
+
+	# python main.py -p C:\Program Files\Adobe\Illustrator -n "Adobe Illustrator"
 	

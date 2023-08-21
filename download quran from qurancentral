@@ -1,0 +1,33 @@
+var tblRows = document.getElementById('audio-episodes').rows
+
+// each table row is an audio
+// tblRows[0] is first tblRows[1] is second etc.
+
+var q = w.getElementsByTagName('td')
+q[0].click() // to select the audio
+
+document.getElementsByClassName('plyr__controls__item plyr__control')[1].click()
+
+// to download the audio
+
+
+// compact code
+for (let index = 0; index < 20; index++) {tblRows[index].getElementsByTagName('td')[0].click(); document.getElementsByClassName('plyr__controls__item plyr__control')[1].click()}
+
+
+for (let index = 0; index < 20; index++) {
+	var tblRows = document.getElementById('audio-episodes').rows
+    
+    var data = tblRows[index].getElementsByTagName('td')[0];
+
+    data.click();
+    
+    await new Promise(r => setTimeout(r, 1000));
+    
+    document.getElementsByClassName('qc-block').item('h2').click();
+    
+    var down = document.getElementsByClassName('plyr__controls__item plyr__control')[1];
+
+    console.log(down.getAttribute('href'));
+
+}

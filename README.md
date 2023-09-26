@@ -11,7 +11,8 @@ right click and select details and then copy name.
 ## Block Internet:
 1. Copy folder path where EXEs are located and pass it in -p argument.
 2. Pass recognizable name to -n.
-3. Run ```bash
+3. Run
+```bash
  python block-exes.py -p "C:\Program Files\Program" -n "The Program"
 ``` 
 

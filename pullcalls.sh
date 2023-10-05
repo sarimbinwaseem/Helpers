@@ -2,15 +2,21 @@
 
 location=/storage/self/primary/MIUI/sound_recorder/call_rec/;
 destination=~/Desktop/Calls/;
-callsfile=$destination'calls.txt';
+
+# Can change Timezone
 todaysdate=$(date --date='TZ="Asia/Karachi" now' +%Y%m%d);
+
+# Don't change this
+callsfile=$destination'calls.txt';
 
 cd $destination;
 
 adb start-server
+adb devices -l
+read -p "Press any key when authorized on phone:"
 
 adb shell ls $location > $callsfile
-adb devices -l
+
 
 if [[ -r lastdate.txt ]]
 then
@@ -37,7 +43,9 @@ while read -r callinfo; do
         echo $c: Copying: $callinfo
         echo
         ((c++));
-            adb pull "${location}${callinfo}"
+        adb pull "${location}${callinfo}"
+        echo
+        echo
 #     else
 #         echo Noooo...
     fi

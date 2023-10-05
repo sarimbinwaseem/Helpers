@@ -23,6 +23,7 @@ It will recurse the directory to the deepest and block all EXEs present.
 2. Attach Android phone to Bash enabled system.
 3. Modify the backup location in the pullcalls.sh script.
 4. Run pullcalls.sh
+
 You can retry by changing date in lastdate.txt in backup location.
 
 # Disclaimer: 

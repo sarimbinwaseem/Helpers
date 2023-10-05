@@ -19,6 +19,7 @@ right click and select details and then copy name.
 It will recurse the directory to the deepest and block all EXEs present.
 
 ## Backup Call Recordings to Linux using ADB:
+### This has worked on my Xiaomi phone. You may need to change filter in the script.
 1. Enable USB Debugging on the phone.
 2. Attach Android phone to Bash enabled system.
 3. Modify the backup location in the pullcalls.sh script.

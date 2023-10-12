@@ -24,7 +24,7 @@ then
     lastdate=$(date -d $( cat lastdate.txt ));
     lastdateepoch=$(date -d $( cat lastdate.txt ) +%s );
 else
-    lastdate=$(date --d "20000101");
+    lastdate=$(date -d "20000101");
 fi
 
 echo Last Date: $lastdate
@@ -46,10 +46,17 @@ while read -r callinfo; do
         adb pull "${location}${callinfo}"
         echo
         echo
-#     else
-#         echo Noooo...
+
     fi
 
 done <$callsfile
 
-echo $todaysdate > lastdate.txt
+read -p "Do you want to update date for next backup? (y/n): " changedate;
+
+if [[ changedate -eq 'y' ]]
+then
+    echo $todaysdate > lastdate.txt
+    echo "Date updated!"
+else
+    echo "Date not updated!"
+fi
